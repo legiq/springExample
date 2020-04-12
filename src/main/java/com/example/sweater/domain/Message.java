@@ -1,6 +1,8 @@
 package com.example.sweater.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Message {
@@ -16,15 +18,11 @@ public class Message {
     @JoinColumn(name = "user_id")
     private User author;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "message_id")
+    private List<Comment> comments = new ArrayList<>();
+
     private String filename;
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
 
     public Message() {
     }
@@ -33,6 +31,22 @@ public class Message {
         this.text = text;
         this.tag = tag;
         this.author = author;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     public String getAuthorName() {
@@ -70,8 +84,5 @@ public class Message {
     public void setTag(String tag) {
         this.tag = tag;
     }
-
-
-
 
 }

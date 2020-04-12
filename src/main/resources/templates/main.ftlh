@@ -30,7 +30,7 @@
                 </div>
                 <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Добавить</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
                 </div>
             </form>
         </div>
@@ -48,9 +48,42 @@
                 <div class="card-footer text-muted">
                     <strong>${message.authorName}</strong>
                 </div>
+                <a class="btn btn-primary ml-2 mt-2" data-toggle="collapse" href="#collapseComment${message.id}"
+                   role="button"
+                   aria-expanded="false"
+                   aria-controls="collapseComment${message.id}">
+                    Add comment
+                </a>
+                <div class="collapse" id="collapseComment${message.id}">
+                    <div class="form-group mt-3">
+                        <form method="post" action="/comment">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="commentText" placeholder=" Enter comment">
+                            </div>
+                            <input type="hidden" name="messageId" value="${message.id}">
+                            <input type="hidden" name="_csrf" value="${_csrf.token}">
+                        </form>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <#list message.comments as comment>
+                        <#if comment.text??>
+                            <div class="m-2">
+                                <span>${comment.text}</span>
+                                <i>--${comment.author.username}</i>
+                            </div>
+                        </#if>
+                    <#else>
+                        <div class="m-2">
+                            No comments
+                        </div>
+                    </#list>
+                </div>
             </div>
         <#else>
-            No message
+            <div class="m-2">
+                No message
+            </div>
         </#list>
     </div>
 </@c.page>

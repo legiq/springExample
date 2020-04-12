@@ -1,7 +1,9 @@
 package com.example.sweater.controller;
 
+import com.example.sweater.domain.Comment;
 import com.example.sweater.domain.Message;
 import com.example.sweater.domain.User;
+import com.example.sweater.repos.CommentRepo;
 import com.example.sweater.repos.MessageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +25,9 @@ public class MainController {
 
     @Autowired
     private MessageRepo messageRepo;
+
+    @Autowired
+    private CommentRepo commentRepo;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -80,5 +85,21 @@ public class MainController {
         model.put("messages", messages);
 
         return "main";
+    }
+
+    @PostMapping("/comment")
+    public String addComment(@AuthenticationPrincipal User user,
+                             @RequestParam String commentText,
+                             @RequestParam("messageId") Message message
+    ) {
+        Comment comment = new Comment(commentText, user);
+
+        commentRepo.save(comment);
+
+        message.getComments().add(comment);
+
+        messageRepo.save(message);
+
+        return "redirect:/main";
     }
 }
