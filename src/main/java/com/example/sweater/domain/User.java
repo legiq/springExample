@@ -22,12 +22,24 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private Page page;
+
     public boolean isAdmin() {
         return roles.contains(Role.ADMIN);
     }
 
     public Long getId() {
         return id;
+    }
+
+    public Page getPage() {
+        return page;
+    }
+
+    public void setPage(Page page) {
+        this.page = page;
     }
 
     public void setId(Long id) {
